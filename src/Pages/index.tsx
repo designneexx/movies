@@ -11,7 +11,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import Pagination from '@material-ui/lab/Pagination';
-import { useQueryParam, NumberParam } from 'use-query-params';
+import { useQueryParam } from 'use-query-params';
 import styled from 'styled-components';
 import { MediaCard } from '../Components/Card';
 import {
@@ -79,15 +79,8 @@ export const IndexPage: FC<RouteComponentI> = memo(({ name: title }) => {
   const selectClasses = useStylesSelect();
   const [favoriteMovies, setFavoriteMovies] = useState<MovieI | null>(null);
   const [movies, setMovies] = useState<MovieI | null>(null);
-  const [page = 1, setPage] = useQueryParam('page', NumberParam);
+  const [page = 1, setPage] = useQueryParam<number | void>('page');
   const [totalPage, setTotalPage] = useState<number>(0);
-  const pagination = useMemo(
-    () => ({
-      page,
-      totalPage,
-    }),
-    [page, totalPage],
-  );
   const {
     value: { genres, account },
   } = useContext(StoreContext);
@@ -114,10 +107,10 @@ export const IndexPage: FC<RouteComponentI> = memo(({ name: title }) => {
   const handlePaginate = useCallback(
     (_e, value) => {
       if (rubric) {
-        handlePendings(() => getSearchMovies(rubric, value).then((data) => setMovies(data)));
+        handlePendings(() => getSearchMovies(rubric, value).then(setMovies);
       } else {
         handlePendings(() =>
-          moviesSortable[sort](value).then((moviesData) => setMovies(moviesData)),
+          moviesSortable[sort](value).then(setMovies),
         );
       }
     },
@@ -138,7 +131,7 @@ export const IndexPage: FC<RouteComponentI> = memo(({ name: title }) => {
 
   useEffect(() => {
     if (rubric) {
-      handlePendings(() => getSearchMovies(rubric).then((data) => setMovies(data)));
+      handlePendings(() => getSearchMovies(rubric).then(setMovies);
     }
   }, [rubric]);
 
@@ -152,8 +145,8 @@ export const IndexPage: FC<RouteComponentI> = memo(({ name: title }) => {
 
   useEffect(() => {
     handlePendings(async () => {
-      await getFavoriteMovies(account.id).then((favMoviesData) => setFavoriteMovies(favMoviesData));
-      await moviesSortable[sort]().then((moviesData) => setMovies(moviesData));
+      await getFavoriteMovies(account.id).then(setFavoriteMovies);
+      await moviesSortable[sort](page).then(setMovies);
     });
   }, [sort, account]);
 
@@ -220,8 +213,8 @@ export const IndexPage: FC<RouteComponentI> = memo(({ name: title }) => {
           </Grid>
           <StyledDiv>
             <Pagination
-              count={pagination.totalPage}
-              page={pagination.page ?? 1}
+              count={totalPage}
+              page={page}
               onChange={handlePaginate}
             />
           </StyledDiv>
